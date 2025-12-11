@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/filelink.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "f/[id].html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/filelink", "dest": "api/filelink.js" },
+    { "src": "/f/(.*)", "dest": "/f/$1" }
+  ]
+}
