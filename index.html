@@ -2,12 +2,36 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Upload</title>
+<title>Upload File</title>
+<style>
+body { font-family: Arial; padding: 20px; }
+button {
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.copy-btn {
+    background: #28a745;
+    margin-left: 10px;
+}
+.box {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+</style>
 </head>
 <body>
 
-<h2>Upload file</h2>
+<h2>📁 Upload file</h2>
+
 <input type="file" id="file">
+<br><br>
 <button onclick="upload()">Upload</button>
 
 <div id="result"></div>
@@ -25,10 +49,25 @@ async function upload() {
 
     const data = await res.json();
 
+    const dl = data.url;
+    const page = data.page;
+
     document.getElementById("result").innerHTML = `
-        <p>📥 Link tải: <a href="${data.url}" target="_blank">${data.url}</a></p>
-        <p>🔗 Trang riêng: <a href="${data.page}" target="_blank">${data.page}</a></p>
+        <div class="box">
+            <p><b>📥 Link tải:</b> <a href="${dl}" target="_blank">${dl}</a></p>
+            <button class="copy-btn" onclick="copyText('${dl}')">Copy Link Tải</button>
+
+            <br><br>
+
+            <p><b>🔗 Trang riêng:</b> <a href="${page}" target="_blank">${page}</a></p>
+            <button class="copy-btn" onclick="copyText('${page}')">Copy Trang Riêng</button>
+        </div>
     `;
+}
+
+function copyText(text) {
+    navigator.clipboard.writeText(text);
+    alert("Đã copy!");
 }
 </script>
 
