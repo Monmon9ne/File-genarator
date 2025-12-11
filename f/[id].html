@@ -3,26 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <title>Tải file</title>
-<style>
-body { font-family: Arial; padding: 20px; }
-button { padding: 12px 20px; background: #28a745; border:none; color:white; border-radius:6px; font-size:16px; }
-</style>
 </head>
 <body>
 
-<h2 id="filename"></h2>
-<a id="download"><button>Tải xuống</button></a>
+<h2 id="name"></h2>
+<a id="download"><button>TẢI XUỐNG</button></a>
 
 <script>
-const url = new URL(window.location.href);
-const filename = url.searchParams.get("name");
-const file = url.searchParams.get("file");
+const url = new URL(location.href);
+const name = url.searchParams.get("name");
+const fileUrl = url.searchParams.get("url");
 
-document.getElementById("filename").innerText = filename;
-document.getElementById("download").href = "/files/" + file;
-document.getElementById("download").download = filename;
+document.getElementById("name").innerText = name;
+document.getElementById("download").href = fileUrl;
+document.getElementById("download").download = name;
 </script>
 
 </body>
 </html>
-
