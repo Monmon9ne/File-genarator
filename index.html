@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>File Link Generator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f2f2f2;
+    }
+    .box {
+        background: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+        margin-bottom: 20px;
+    }
+    button {
+        padding: 8px 14px;
+        border: none;
+        background: #007bff;
+        color: #fff;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    button:hover { background: #0056b3; }
+    .file-item, .text-item {
+        margin-bottom: 10px;
+        padding: 10px;
+        background: #e9e9e9;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+
+<h2>📁 File Upload & Text Link Generator</h2>
+
+<div class="box">
+    <h3>Upload File</h3>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Tạo link</button>
+</div>
+
+<div class="box">
+    <h3>Tạo file từ văn bản</h3>
+    <textarea id="textInput" rows="4" style="width:100%;"></textarea>
+    <button onclick="createTextFile()">Tạo file từ chữ</button>
+</div>
+
+<h3>Danh sách file đã lưu</h3>
+<div id="output"></div>
+
+<script>
+// --- Local Storage ---
+let saved = JSON.parse(localStorage.getItem("files")) || [];
+
+// --- Render danh sách ---
+function render() {
+    const div = document.getElementById("output");
+    div.innerHTML = "";
+
+    saved.forEach((item, i) => {
+        div.innerHTML += `
+            <div class="file-item">
+                <b>${item.name}</b><br>
+                <a href="${item.url}" download="${item.name}">
+                    <button>Tải xuống</button>
+                </a>
+                <button onclick="deleteItem(${i})" style="background:red;margin-left:10px;">Xóa</button>
+            </div>
+        `;
+    });
+}
+render();
+
+// --- Upload file ---
+function uploadFile() {
+    const f = document.getElementById("fileInput").files[0];
+    if (!f) return alert("Chưa chọn file!");
+
+    const url = URL.createObjectURL(f);
+
+    saved.push({ name: f.name, url: url });
+    localStorage.setItem("files", JSON.stringify(saved));
+
+    render();
+}
+
+// --- Tạo file từ chữ ---
+function createTextFile() {
+    const text = document.getElementById("textInput").value;
+    if (!text) return alert("Nhập chữ trước!");
+
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const name = "text_" + Date.now() + ".txt";
+
+    saved.push({ name: name, url: url });
+    localStorage.setItem("files", JSON.stringify(saved));
+
+    render();
+}
+
+// --- Xóa 1 item ---
+function deleteItem(i) {
+    saved.splice(i, 1);
+    localStorage.setItem("files", JSON.stringify(saved));
+    render();
+}
+</script>
+
+</body>
+</html>
